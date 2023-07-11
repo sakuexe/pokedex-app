@@ -14,3 +14,4 @@ npx create-expo-app -e with-router
 - [PokeAPI](https://pokeapi.co/)
 - [Expo Router: Docs](https://expo.github.io/router)
 - [Expo Router: Repo](https://github.com/expo/router)
+- [react-native-picker](https://github.com/react-native-picker/picker)
