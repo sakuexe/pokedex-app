@@ -1,6 +1,7 @@
-# Expo Router Example
+# Crossplatform Pokedex
 
-Use [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory.
+This is my first React Native project. I'm using Expo to build a crossplatform Pokedex.
+This is done with the use of the PokeAPI and the Expo Router.
 
 ## 🚀 How to use
 
@@ -10,5 +11,6 @@ npx create-expo-app -e with-router
 
 ## 📝 Notes
 
+- [PokeAPI](https://pokeapi.co/)
 - [Expo Router: Docs](https://expo.github.io/router)
 - [Expo Router: Repo](https://github.com/expo/router)
