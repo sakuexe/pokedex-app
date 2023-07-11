@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
+    marginHorizontal: 20,
   },
   bannerPrimary: {
     backgroundColor: COLORS.primary,
@@ -25,6 +26,21 @@ const styles = StyleSheet.create({
   bannerText: {
     color: COLORS.white,
     textAlign: "center",
+  },
+  listContainer: {
+    flexDirection: "row",
+  },
+  listing: {
+    aspectRatio: 1,
+    backgroundColor: COLORS.primary,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  listingText: {
+    color: COLORS.white,
+    fontWeight: "bold",
+    paddingBottom: 20,
   },
 });
 
