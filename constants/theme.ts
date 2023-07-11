@@ -6,4 +6,14 @@ const COLORS = {
   white: "#e8d3d5",
 };
 
-export default COLORS;
+const SIZES = {
+  xs: 10,
+  sm: 12,
+  md: 16,
+  lg: 20,
+  xl: 24,
+  xxl: 32,
+  bottomPadding: 160,
+};
+
+export { COLORS, SIZES };

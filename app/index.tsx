@@ -1,19 +1,13 @@
 import { Stack, useRouter } from "expo-router";
-import {
-  Text,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-  GestureResponderEvent,
-} from "react-native";
+import { Text, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 // constants
 import { COLORS } from "../constants";
 // components
 import HelloBanner from "./hellobanner";
 
 export default function Home() {
+  const router = useRouter();
   const navigateTo = (screen: string) => {
-    const router = useRouter();
     router.push(screen);
   };
   return (
@@ -31,7 +25,7 @@ export default function Home() {
         <HelloBanner />
         <TouchableOpacity
           onPress={() => {
-            navigateTo("/pokelist/");
+            navigateTo("/pokelist");
           }}
         >
           <Text>Search pokemon</Text>

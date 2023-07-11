@@ -1,12 +1,18 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS } from "../constants";
+import { COLORS, SIZES } from "../constants";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    marginHorizontal: 20,
+    justifyContent: "space-between",
+  },
+  mainHeader: {
+    fontSize: SIZES.xxl,
+    fontWeight: "bold",
+    color: COLORS.black,
+    paddingVertical: SIZES.md,
+    textAlign: "center",
   },
   bannerPrimary: {
     backgroundColor: COLORS.primary,
@@ -28,9 +34,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   listContainer: {
+    marginTop: SIZES.lg,
+    marginBottom: SIZES.bottomPadding,
+    marginHorizontal: SIZES.sm,
+    flex: 1,
     flexDirection: "row",
+    flexWrap: "wrap",
+    gap: SIZES.sm,
+    justifyContent: "center",
   },
   listing: {
+    width: "30%",
     aspectRatio: 1,
     backgroundColor: COLORS.primary,
     borderRadius: 20,
