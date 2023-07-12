@@ -56,6 +56,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingBottom: 20,
   },
+  filterContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: SIZES.sm,
+    backgroundColor: COLORS.primary,
+    justifyContent: "space-between",
+    paddingHorizontal: SIZES.sm,
+    paddingBottom: SIZES.lg,
+    borderBottomEndRadius: SIZES.lg,
+    borderBottomStartRadius: SIZES.lg,
+  },
+  filterPicker: {
+    flexGrow: 1,
+    flexShrink: 1,
+    backgroundColor: COLORS.primaryDark,
+    borderRadius: 10,
+  },
+  filterText: {
+    fontSize: SIZES.md,
+    fontWeight: "bold",
+    color: COLORS.white,
+  },
 });
 
 export default styles;
