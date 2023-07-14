@@ -4,6 +4,7 @@ import { COLORS, IMAGES } from "@/constants";
 import styles from "@/styles/common";
 // util functions
 import { capitalize } from "@/utils/string";
+import { getEndpoint } from "../..//utils/urlparse";
 
 const API_URL = "https://pokeapi.co/api/v2/";
 

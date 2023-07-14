@@ -14,12 +14,12 @@ import { PokemonType } from "./pokeitem";
 import { REGIONS } from "../../assets/json/regions";
 import PickerFilter from "./filter";
 
-const API_URL = "https://pokeapi.co/api/v2/";
+const API_URL = "https://pokeapi.co/api/v2";
 
 export default function Pokelist() {
   const [region, setRegion] = useState(0);
   const { data, isLoading, error } = useFetch<PokemonType>(
-    `${API_URL}pokemon?limit=151`,
+    `${API_URL}/pokemon?limit=25`,
   );
   return (
     <SafeAreaView style={styles.container}>

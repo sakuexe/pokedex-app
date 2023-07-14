@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getData, storeData } from "../utils/datastore";
+import { getEndpoint } from "../utils/urlparse";
 
 export default function useFetch<Type>(url: string, options?: RequestInit) {
   const [data, setData] = useState([] as Type[]);
@@ -7,7 +8,8 @@ export default function useFetch<Type>(url: string, options?: RequestInit) {
   const [isLoading, setIsLoading] = useState(false);
 
   const checkStorage = async () => {
-    const storedData = await getData(url);
+    const storedData = await getData(getEndpoint(url));
+    console.log("stored data: ", storedData);
     if (!storedData) return false;
     setData(storedData);
     setIsLoading(false);
@@ -19,7 +21,7 @@ export default function useFetch<Type>(url: string, options?: RequestInit) {
       const response = await fetch(url, options);
       const json = await response.json();
       console.log("fetched data from: ", url);
-      storeData(json.results, url);
+      storeData(json.results, getEndpoint(url));
       setData(json.results);
     } catch (error) {
       setError(error);

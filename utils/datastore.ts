@@ -16,8 +16,10 @@ export async function storeData(value: any, key: string) {
 
 export async function getData(key: string) {
   try {
+    console.log("all keys: ", await AsyncStorage.getAllKeys());
     const jsonValue = await AsyncStorage.getItem(key);
     console.log("loaded data locally from: ", key);
+    console.log("data: ", jsonValue);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.log(e);
