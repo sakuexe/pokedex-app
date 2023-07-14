@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   listing: {
-    width: "30%",
+    width: 120,
     aspectRatio: 1,
     backgroundColor: COLORS.primary,
     borderRadius: 20,
@@ -55,6 +55,11 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontWeight: "bold",
     paddingBottom: 20,
+  },
+  listingImage: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: COLORS.primaryDark,
   },
   filterContainer: {
     flex: 1,
