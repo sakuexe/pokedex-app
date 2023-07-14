@@ -6,6 +6,11 @@ type RegionType = {
 
 const REGIONS: RegionType[] = [
   {
+    name: "National",
+    first: 1,
+    last: 898,
+  },
+  {
     name: "Kanto",
     first: 1,
     last: 151,

@@ -1,19 +1,26 @@
 import { Stack } from "expo-router";
-import { Image, Text, View, SafeAreaView, ScrollView } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import { Text, View, SafeAreaView, ScrollView } from "react-native";
 // react hooks
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useState } from "react";
+// custom hooks
+import useFetch from "../../hooks/useFetch";
 // constants
 import { COLORS } from "../../constants";
 import styles from "../../styles/common";
-import images from "../../constants/images";
 // custom components
 import PokeItem from "./pokeitem";
+import { PokemonType } from "./pokeitem";
 // data
-import { REGIONS, RegionType } from "../../assets/json/regions";
+import { REGIONS } from "../../assets/json/regions";
+import PickerFilter from "./filter";
+
+const API_URL = "https://pokeapi.co/api/v2/";
 
 export default function Pokelist() {
-  const [region, setRegion] = useState("");
+  const [region, setRegion] = useState(0);
+  const { data, isLoading, error } = useFetch<PokemonType>(
+    `${API_URL}pokemon?limit=151`,
+  );
   return (
     <SafeAreaView style={styles.container}>
       <Stack.Screen
@@ -27,55 +34,23 @@ export default function Pokelist() {
       />
 
       <ScrollView style={{ backgroundColor: COLORS.white }}>
-        <SelectionFilter
+        <PickerFilter
           currentState={region}
           setState={setRegion}
           selection={REGIONS}
         />
         <View style={styles.listContainer}>
-          {[...Array(20)].map((element: number, index: number) => (
-            <PokeItem key={index} />
-          ))}
-          <PokeItem />
+          {isLoading ? (
+            <Text>Loading...</Text>
+          ) : error ? (
+            <Text>Something went wrong</Text>
+          ) : (
+            data?.map((pokemon: PokemonType, index: number) => (
+              <PokeItem key={index} name={pokemon.name} url={pokemon.url} />
+            ))
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
-}
-
-type FilterProps = {
-  currentState: string;
-  setState: Dispatch<SetStateAction<string>>;
-  selection: any[];
-  label?: string;
-};
-
-function SelectionFilter(props: FilterProps) {
-  return (
-    <View style={styles.filterContainer}>
-      <Text style={styles.filterText}>{props.label ? props.label : ""}</Text>
-      <View style={styles.filterPicker}>
-        <Picker
-          mode="dialog"
-          style={{
-            color: COLORS.white,
-            fontWeight: "bold",
-          }}
-          selectedValue={props.currentState}
-          onValueChange={(itemValue, itemIndex) => props.setState(itemValue)}
-        >
-          {props.selection.map((item: any, index: number) => (
-            <Picker.Item
-              key={index}
-              label={
-                `${index + 1}. ${item.name} ` +
-                (item.first && item.last ? `(${item.first}-${item.last})` : "")
-              }
-              value={item.name}
-            />
-          ))}
-        </Picker>
-      </View>
-    </View>
   );
 }
