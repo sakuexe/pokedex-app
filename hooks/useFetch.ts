@@ -7,9 +7,8 @@ export default function useFetch<Type>(url: string, options?: RequestInit) {
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const checkStorage = async () => {
+  const loadLocalData = async () => {
     const storedData = await getData(getEndpoint(url));
-    console.log("stored data: ", storedData);
     if (!storedData) return false;
     setData(storedData);
     setIsLoading(false);
@@ -28,14 +27,18 @@ export default function useFetch<Type>(url: string, options?: RequestInit) {
     }
   };
 
-  useEffect(() => {
+  const dataLoading = async () => {
     setIsLoading(true);
-    if (checkStorage()) {
+    if (await loadLocalData()) {
       setIsLoading(false);
-      return;
+      return true;
     }
     fetchData();
     setIsLoading(false);
+  };
+
+  useEffect(() => {
+    dataLoading();
   }, []);
 
   return { data, error, isLoading };
