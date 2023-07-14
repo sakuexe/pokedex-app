@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   listingImage: {
     width: "100%",
     height: "100%",
-    backgroundColor: COLORS.primaryDark,
   },
   filterContainer: {
     flex: 1,
