@@ -38,7 +38,7 @@ export default function PokeItem(pokemon: PokemonType) {
     (async () => {
       const resizedImage = await resizeImage(
         data.sprites.front_default,
-        { width: 400 },
+        { width: 500 },
         0.8,
       );
       setImage(resizedImage);

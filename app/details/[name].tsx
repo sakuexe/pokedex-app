@@ -2,15 +2,14 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { SafeAreaView, ScrollView, View, Text } from "react-native";
 import { Image } from "expo-image";
 // constants
-import { COLORS, ICONS } from "@/constants";
+import { COLORS, TYPE_COLORS, ICONS } from "@/constants";
 import styles from "@/styles/common";
 import details from "@/styles/details";
 // util functions
 import { capitalize } from "@/utils/string";
 import useFetch from "@/hooks/useFetch";
 // types
-import { PokeAPI } from "pokeapi-types";
-import { useEffect } from "react";
+import { PokemonType } from "@/constants/types";
 
 export default function PokemonInfo() {
   const searchParams = useLocalSearchParams();
@@ -19,7 +18,11 @@ export default function PokemonInfo() {
     data: pokemon,
     isLoading,
     error,
-  } = useFetch(`https://pokeapi.co/api/v2/pokemon/${searchParams.name}`);
+  } = useFetch(`https://pokeapi.co/api/v2/pokemon/${searchParams.name}`) as {
+    data: PokemonType | null;
+    isLoading: boolean;
+    error: Error | null;
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -34,7 +37,9 @@ export default function PokemonInfo() {
       />
 
       <ScrollView style={{ backgroundColor: COLORS.white }}>
-        <View style={{ backgroundColor: "#af8" }}>
+        <View
+          style={{ backgroundColor: TYPE_COLORS[pokemon?.types[0].type.name] }}
+        >
           {isLoading ? (
             <Text style={details.text}>Loading...</Text>
           ) : error ? (
@@ -46,6 +51,11 @@ export default function PokemonInfo() {
                   source={
                     pokemon?.sprites.other["official-artwork"].front_default
                   }
+                  transition={{
+                    duration: 0.5,
+                    effect: "cross-dissolve",
+                    timing: "ease-in-out",
+                  }}
                   style={details.image}
                 />
               </View>
