@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { ImageResult } from "expo-image-manipulator";
+import { useRouter } from "expo-router";
 // constants
 import { IMAGES } from "@/constants";
 import styles from "@/styles/common";
@@ -20,6 +21,7 @@ export type PokemonType = {
 };
 
 export default function PokeItem(pokemon: PokemonType) {
+  const router = useRouter();
   const { data, isLoading, error } = useFetch<PokeAPI.Pokemon>(
     `${API_URL}/${pokemon.name}`,
   ) as {
@@ -43,8 +45,12 @@ export default function PokeItem(pokemon: PokemonType) {
     })();
   }, [data]);
 
+  const handlePress = () => {
+    router.push(`/details/${pokemon.name}`);
+  };
+
   return (
-    <TouchableOpacity style={styles.listing}>
+    <TouchableOpacity onPress={handlePress} style={styles.listing}>
       {isLoading ? (
         <>
           <Image source={IMAGES.loading} style={styles.listingImage} />
@@ -54,11 +60,7 @@ export default function PokeItem(pokemon: PokemonType) {
         <Text style={styles.listingText}>Something went wrong...</Text>
       ) : (
         <>
-          <Image
-            source={image}
-            placeholder={IMAGES.loading}
-            style={styles.listingImage}
-          />
+          <Image source={image} style={styles.listingImage} />
           <Text style={styles.listingText}>{capitalize(pokemon.name)}</Text>
         </>
       )}

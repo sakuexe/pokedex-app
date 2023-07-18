@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   listingText: {
     color: COLORS.white,
     fontWeight: "bold",
+    marginTop: -14,
     paddingBottom: 20,
   },
   listingImage: {
