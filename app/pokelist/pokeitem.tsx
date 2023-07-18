@@ -1,13 +1,16 @@
 import { Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
+import { ImageResult } from "expo-image-manipulator";
 // constants
-import { COLORS, IMAGES } from "@/constants";
+import { IMAGES } from "@/constants";
 import styles from "@/styles/common";
 // util functions
 import { capitalize } from "@/utils/string";
+import { resizeImage } from "@/utils/imagemanipulate";
 import useFetch from "@/hooks/useFetch";
 // types
 import { PokeAPI } from "pokeapi-types";
+import { useEffect, useState } from "react";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
@@ -25,6 +28,21 @@ export default function PokeItem(pokemon: PokemonType) {
     error: Error | null;
   };
 
+  const [image, setImage] = useState<ImageResult>(null);
+
+  useEffect(() => {
+    // Image.clearDiskCache();
+    if (!data) return;
+    (async () => {
+      const resizedImage = await resizeImage(
+        data.sprites.front_default,
+        { width: 400 },
+        0.8,
+      );
+      setImage(resizedImage);
+    })();
+  }, [data]);
+
   return (
     <TouchableOpacity style={styles.listing}>
       {isLoading ? (
@@ -37,7 +55,7 @@ export default function PokeItem(pokemon: PokemonType) {
       ) : (
         <>
           <Image
-            source={{ uri: data?.sprites.front_default }}
+            source={image}
             placeholder={IMAGES.loading}
             style={styles.listingImage}
           />
