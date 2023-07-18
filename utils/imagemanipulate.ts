@@ -18,7 +18,7 @@ export async function resizeImage(
    * Resize image to a given size and return the result
    * ---
    * @param uri: string - uri of the image
-   * @param size: ImageSize - an object of width and heigh for the image
+   * @param size: ImageSize - an object of width and height for the image
    * @param quality: number - compression quality of the image. Range: 0 - 1
    * @return Promise<ImageResult> - resulting image, in png format
    */
