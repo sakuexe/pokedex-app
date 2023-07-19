@@ -2,14 +2,14 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { SafeAreaView, ScrollView, View, Text } from "react-native";
 import { Image } from "expo-image";
 // constants
-import { COLORS, TYPE_COLORS, ICONS } from "@/constants";
-import styles from "@/styles/common";
-import details from "@/styles/details";
+import { COLORS, TYPE_COLORS, ICONS } from "../../constants";
+import styles from "../../styles/common";
+import details from "../../styles/details";
 // util functions
-import { capitalize } from "@/utils/string";
-import useFetch from "@/hooks/useFetch";
+import { capitalize } from "../../utils/string";
+import useFetch from "../../hooks/useFetch";
 // types
-import { PokemonType } from "@/constants/types";
+import { PokemonType } from "../../constants/types";
 
 export default function PokemonInfo() {
   const searchParams = useLocalSearchParams();
@@ -30,7 +30,9 @@ export default function PokemonInfo() {
         options={{
           headerStyle: { backgroundColor: COLORS.primary },
           headerShadowVisible: false,
-          headerTitle: `#${pokemon?.id} — ${capitalize(searchParams.name)}`,
+          headerTitle: `#${pokemon?.id} — ${capitalize(
+            searchParams.name.toString(),
+          )}`,
           headerTitleAlign: "center",
           headerTintColor: COLORS.white,
         }}

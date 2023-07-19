@@ -3,12 +3,12 @@ import { Image } from "expo-image";
 import { ImageResult } from "expo-image-manipulator";
 import { useRouter } from "expo-router";
 // constants
-import { IMAGES } from "@/constants";
-import styles from "@/styles/common";
+import { IMAGES } from "../../constants";
+import styles from "../../styles/common";
 // util functions
-import { capitalize } from "@/utils/string";
-import { resizeImage } from "@/utils/imagemanipulate";
-import useFetch from "@/hooks/useFetch";
+import { capitalize } from "../../utils/string";
+import { resizeImage } from "../../utils/imagemanipulate";
+import useFetch from "../../hooks/useFetch";
 // types
 import { PokeAPI } from "pokeapi-types";
 import { useEffect, useState } from "react";

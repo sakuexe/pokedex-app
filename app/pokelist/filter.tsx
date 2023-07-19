@@ -3,8 +3,8 @@ import { Picker } from "@react-native-picker/picker";
 // types
 import { Dispatch, SetStateAction } from "react";
 // constants
-import { COLORS } from "@/constants";
-import styles from "@/styles/common";
+import { COLORS } from "../../constants";
+import styles from "../../styles/common";
 
 type FilterProps = {
   currentState: SetStateAction<string | number>;
