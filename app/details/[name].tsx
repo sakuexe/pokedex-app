@@ -1,16 +1,17 @@
 import { Stack, useLocalSearchParams } from "expo-router";
 import { SafeAreaView, ScrollView, View, Text } from "react-native";
-import { Image } from "expo-image";
 // constants
 import { COLORS, TYPE_COLORS, ICONS, SIZES } from "../../constants";
-import styles from "../../styles/common";
-import details from "../../styles/details";
 // util functions
 import { capitalize } from "../../utils/string";
 import useFetch from "../../hooks/useFetch";
 // types
 import { PokemonType } from "../../constants/types";
 import Info from "./info";
+import PokemonImage from "./image";
+import details from "../../styles/details";
+import Evolution from "./evolution";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function PokemonInfo() {
   const searchParams = useLocalSearchParams();
@@ -19,10 +20,12 @@ export default function PokemonInfo() {
     data: pokemon,
     isLoading,
     error,
+    refetch,
   } = useFetch(`https://pokeapi.co/api/v2/pokemon/${searchParams.name}`) as {
     data: PokemonType | null;
     isLoading: boolean;
     error: Error | null;
+    refetch: () => void;
   };
 
   return (
@@ -46,23 +49,7 @@ export default function PokemonInfo() {
         }}
       />
 
-      <View style={details.imageContainer}>
-        {isLoading ? (
-          <Text style={details.text}>Loading...</Text>
-        ) : error ? (
-          <Text style={details.text}>Something went wrong...</Text>
-        ) : (
-          <Image
-            source={pokemon?.sprites.other["official-artwork"].front_default}
-            transition={{
-              duration: 0.5,
-              effect: "cross-dissolve",
-              timing: "ease-in-out",
-            }}
-            style={details.image}
-          />
-        )}
-      </View>
+      <PokemonImage pokemon={pokemon} isLoading={isLoading} error={error} />
 
       <ScrollView
         showsVerticalScrollIndicator={true}
@@ -70,7 +57,22 @@ export default function PokemonInfo() {
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <View style={{ height: SIZES.pokemonDetailImage }} />
-        <Info pokemon={pokemon} />
+        <View style={details.container}>
+          <Info pokemon={pokemon} />
+          <View style={details.horizontalDivider} />
+          {isLoading || !pokemon ? (
+            <Text>loading...</Text>
+          ) : error ? (
+            <>
+              <Text>something went wrong...</Text>
+              <TouchableOpacity onPress={() => refetch}>
+                <Text>Reload</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <Evolution pokemonId={pokemon.id} />
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

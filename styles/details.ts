@@ -48,7 +48,7 @@ const detailsStyles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: COLORS.white,
     paddingHorizontal: SIZES.md,
-    paddingVertical: SIZES.lg,
+    paddingVertical: SIZES.xl,
     marginHorizontal: SIZES.sm,
     borderTopStartRadius: SIZES.xl,
     borderTopEndRadius: SIZES.xl,

@@ -13,7 +13,7 @@ export default function Info({ pokemon }: { pokemon: PokemonType }) {
       </View>
     );
   return (
-    <View style={details.container}>
+    <>
       <View style={details.mainInfo}>
         <Text style={details.h1}>{pokemon.name}</Text>
         <Text>#{pokemon.id}</Text>
@@ -54,12 +54,6 @@ export default function Info({ pokemon }: { pokemon: PokemonType }) {
           <Text style={details.text}>Weight</Text>
         </View>
       </View>
-
-      <View style={details.horizontalDivider} />
-
-      <Text style={details.text}>
-        Base Experience: {pokemon.base_experience}
-      </Text>
-    </View>
+    </>
   );
 }
