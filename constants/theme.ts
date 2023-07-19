@@ -16,6 +16,7 @@ const SIZES = {
   xl: 24,
   xxl: 32,
   bottomPadding: 160,
+  pokemonDetailImage: 300,
 };
 
 const TYPE_COLORS = {
@@ -23,10 +24,10 @@ const TYPE_COLORS = {
   fire: "#ee8130",
   water: "#6390f0",
   electric: "#f7d02c",
-  grass: "#7ac74c",
+  grass: "#8ec76b",
   ice: "#96d9d6",
   fighting: "#c22e28",
-  poison: "#a33ea1",
+  poison: "#9e5c9d",
   ground: "#e2bf65",
   flying: "#a98ff3",
   psychic: "#f95587",
@@ -39,4 +40,25 @@ const TYPE_COLORS = {
   fairy: "#d685ad",
 };
 
-export { COLORS, SIZES, TYPE_COLORS };
+const TYPE_TEXT = {
+  normal: "black",
+  fire: "black",
+  water: "black",
+  electric: "black",
+  grass: "black",
+  ice: "black",
+  fighting: "white",
+  poison: "white",
+  ground: "black",
+  flying: "white",
+  psychic: "white",
+  bug: "black",
+  rock: "white",
+  ghost: "white",
+  dragon: "white",
+  dark: "white",
+  steel: "black",
+  fairy: "black",
+};
+
+export { COLORS, SIZES, TYPE_COLORS, TYPE_TEXT };

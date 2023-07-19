@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { SafeAreaView, ScrollView, View, Text } from "react-native";
 import { Image } from "expo-image";
 // constants
-import { COLORS, TYPE_COLORS, ICONS } from "../../constants";
+import { COLORS, TYPE_COLORS, ICONS, SIZES } from "../../constants";
 import styles from "../../styles/common";
 import details from "../../styles/details";
 // util functions
@@ -10,6 +10,7 @@ import { capitalize } from "../../utils/string";
 import useFetch from "../../hooks/useFetch";
 // types
 import { PokemonType } from "../../constants/types";
+import Info from "./info";
 
 export default function PokemonInfo() {
   const searchParams = useLocalSearchParams();
@@ -25,10 +26,17 @@ export default function PokemonInfo() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: TYPE_COLORS[pokemon?.types[0].type.name],
+      }}
+    >
       <Stack.Screen
         options={{
-          headerStyle: { backgroundColor: COLORS.primary },
+          headerStyle: {
+            backgroundColor: TYPE_COLORS[pokemon?.types[0].type.name],
+          },
           headerShadowVisible: false,
           headerTitle: `#${pokemon?.id} — ${capitalize(
             searchParams.name.toString(),
@@ -38,41 +46,31 @@ export default function PokemonInfo() {
         }}
       />
 
-      <ScrollView style={{ backgroundColor: COLORS.white }}>
-        <View
-          style={{ backgroundColor: TYPE_COLORS[pokemon?.types[0].type.name] }}
-        >
-          {isLoading ? (
-            <Text style={details.text}>Loading...</Text>
-          ) : error ? (
-            <Text style={details.text}>Something went wrong...</Text>
-          ) : (
-            <>
-              <View style={details.imageContainer}>
-                <Image
-                  source={
-                    pokemon?.sprites.other["official-artwork"].front_default
-                  }
-                  transition={{
-                    duration: 0.5,
-                    effect: "cross-dissolve",
-                    timing: "ease-in-out",
-                  }}
-                  style={details.image}
-                />
-              </View>
-              <View style={details.container}>
-                <Text style={details.text}>ID: {pokemon?.id}</Text>
-                <Text style={details.text}>Name: {pokemon?.name}</Text>
-                <Text style={details.text}>Height: {pokemon?.height}</Text>
-                <Text style={details.text}>Weight: {pokemon?.weight}</Text>
-                <Text style={details.text}>
-                  Base Experience: {pokemon?.base_experience}
-                </Text>
-              </View>
-            </>
-          )}
-        </View>
+      <View style={details.imageContainer}>
+        {isLoading ? (
+          <Text style={details.text}>Loading...</Text>
+        ) : error ? (
+          <Text style={details.text}>Something went wrong...</Text>
+        ) : (
+          <Image
+            source={pokemon?.sprites.other["official-artwork"].front_default}
+            transition={{
+              duration: 0.5,
+              effect: "cross-dissolve",
+              timing: "ease-in-out",
+            }}
+            style={details.image}
+          />
+        )}
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={true}
+        style={{ height: "100%", flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View style={{ height: SIZES.pokemonDetailImage }} />
+        <Info pokemon={pokemon} />
       </ScrollView>
     </SafeAreaView>
   );
