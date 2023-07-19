@@ -1,17 +1,23 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import { SafeAreaView, ScrollView, View, Text } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 // constants
-import { COLORS, TYPE_COLORS, ICONS, SIZES } from "../../constants";
+import { COLORS, TYPE_COLORS, SIZES } from "../../constants";
+import details from "../../styles/details";
 // util functions
 import { capitalize } from "../../utils/string";
 import useFetch from "../../hooks/useFetch";
 // types
 import { PokemonType } from "../../constants/types";
+// components
 import Info from "./info";
 import PokemonImage from "./image";
-import details from "../../styles/details";
 import Evolution from "./evolution";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function PokemonInfo() {
   const searchParams = useLocalSearchParams();
@@ -21,12 +27,9 @@ export default function PokemonInfo() {
     isLoading,
     error,
     refetch,
-  } = useFetch(`https://pokeapi.co/api/v2/pokemon/${searchParams.name}`) as {
-    data: PokemonType | null;
-    isLoading: boolean;
-    error: Error | null;
-    refetch: () => void;
-  };
+  } = useFetch<PokemonType>(
+    `https://pokeapi.co/api/v2/pokemon/${searchParams.name}`,
+  );
 
   return (
     <SafeAreaView

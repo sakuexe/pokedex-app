@@ -24,11 +24,7 @@ export default function PokeItem(pokemon: PokemonType) {
   const router = useRouter();
   const { data, isLoading, error } = useFetch<PokeAPI.Pokemon>(
     `${API_URL}/${pokemon.name}`,
-  ) as {
-    data: PokeAPI.Pokemon | null;
-    isLoading: boolean;
-    error: Error | null;
-  };
+  );
 
   const [image, setImage] = useState<ImageResult>(null);
 
