@@ -1,11 +1,5 @@
 import { Stack, useLocalSearchParams } from "expo-router";
-import {
-  SafeAreaView,
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 // constants
 import { COLORS, TYPE_COLORS, SIZES } from "../../constants";
 import details from "../../styles/details";
@@ -18,6 +12,8 @@ import { PokemonType } from "../../constants/types";
 import Info from "./info";
 import PokemonImage from "./image";
 import Evolution from "./evolution";
+import Loading from "../../components/loading";
+import ErrorView from "../../components/error";
 
 export default function PokemonInfo() {
   const searchParams = useLocalSearchParams();
@@ -30,6 +26,9 @@ export default function PokemonInfo() {
   } = useFetch<PokemonType>(
     `https://pokeapi.co/api/v2/pokemon/${searchParams.name}`,
   );
+
+  if (isLoading || !pokemon) return <Loading />;
+  if (error) return <ErrorView reload={() => refetch} />;
 
   return (
     <SafeAreaView
@@ -64,18 +63,7 @@ export default function PokemonInfo() {
         <View style={details.container}>
           <Info pokemon={pokemon} />
           <View style={details.horizontalDivider} />
-          {isLoading || !pokemon ? (
-            <Text>loading...</Text>
-          ) : error ? (
-            <>
-              <Text>something went wrong...</Text>
-              <TouchableOpacity onPress={() => refetch}>
-                <Text>Reload</Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <Evolution pokemonId={pokemon.id} />
-          )}
+          <Evolution pokemonId={pokemon?.id} />
         </View>
       </ScrollView>
     </SafeAreaView>
