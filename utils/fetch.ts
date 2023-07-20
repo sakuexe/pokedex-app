@@ -22,10 +22,10 @@ async function fetchOnline(url: string, options?: RequestInit) {
   if (!response.ok) {
     throw new Error(`Bad response: ${response.status}`);
   }
-  const json = await response.json();
+  const data = await response.json();
   console.log("fetched data from: ", url);
-  storeData(json, getEndpoint(url));
-  return JSON.parse(json);
+  storeData(JSON.stringify(data), getEndpoint(url));
+  return data;
 }
 
 export default async function fetchData<Type>(
