@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import details from "../../styles/details";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
+// components
+import Loading from "../../components/loading";
 // custom hooks
 import fetchData from "../../utils/fetch";
 // types
@@ -32,7 +34,7 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
   }
 
   useEffect(() => {
-    fetchEvolutionChain();
+    // fetchEvolutionChain();
   }, []);
 
   if (state.error)
@@ -49,12 +51,7 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
       </View>
     );
 
-  if (state.loading)
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+  if (state.loading) return <Loading />;
 
   return (
     <View style={details.container}>
