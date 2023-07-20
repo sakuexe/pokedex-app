@@ -40,6 +40,7 @@ export default function PokemonInfo() {
     >
       <Stack.Screen
         options={{
+          // headerShown: false,
           headerStyle: {
             backgroundColor: TYPE_COLORS[pokemon?.types[0].type.name],
           },
@@ -55,7 +56,7 @@ export default function PokemonInfo() {
       <PokemonImage pokemon={pokemon} isLoading={isLoading} error={error} />
 
       <ScrollView
-        showsVerticalScrollIndicator={true}
+        showsVerticalScrollIndicator={false}
         style={{ height: "100%", flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
       >

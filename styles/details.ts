@@ -72,6 +72,7 @@ const detailsStyles = StyleSheet.create({
     marginVertical: SIZES.lg,
   },
   physicalItem: {
+    width: "20%",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
