@@ -3,6 +3,7 @@ import details from "../../styles/details";
 import { useEffect, useReducer } from "react";
 // components
 import Loading from "../../components/loading";
+import ErrorView from "../../components/error";
 // custom hooks
 import fetchData from "../../utils/fetch";
 // types
@@ -17,12 +18,11 @@ const SPECIES_URL = "https://pokeapi.co/api/v2/pokemon-species";
 export default function Evolution({ pokemonId }: { pokemonId: number }) {
   const [state, dispatch] = useReducer(fetchReducer, INITIAL_STATE as any);
 
-  async function fetchEvolutionChain() {
+  async function fetchEvolutionChain(): Promise<void> {
     dispatch({ type: "FETCH_START" });
     try {
       const species = await fetchData<Species>(`${SPECIES_URL}/${pokemonId}`);
       dispatch({ type: "FETCH_SPECIES_SUCCESS", species: species });
-      // throw new Error("test");
       const evolutionChain = await fetchData<EvolutionChain>(
         species.evolution_chain.url,
       );
@@ -34,22 +34,10 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
   }
 
   useEffect(() => {
-    // fetchEvolutionChain();
+    fetchEvolutionChain();
   }, []);
 
-  if (state.error)
-    return (
-      <View>
-        <Text>Error while loading the evolution chain...</Text>
-        <TouchableOpacity
-          onPress={() => {
-            fetchEvolutionChain;
-          }}
-        >
-          <Text>Retry</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  if (state.error) return <ErrorView reload={() => fetchEvolutionChain()} />;
 
   if (state.loading) return <Loading />;
 
