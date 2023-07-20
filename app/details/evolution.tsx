@@ -43,9 +43,26 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
 
   return (
     <View style={details.container}>
-      <Text>{pokemonId}</Text>
-      <Text>{state.species?.name}</Text>
-      <Text>{state.evolutionChain?.id}</Text>
+      {/* first evolution */}
+      <Text>{state.evolutionChain?.chain.species.name}</Text>
+
+      {state.evolutionChain?.chain.evolves_to?.map(
+        (evolution: PokeAPI.ChainLink, index: number) => (
+          <>
+            {/* second evolutions */}
+            <Text key={`${state.species.name}-${index}`}>
+              {evolution.species.name}
+            </Text>
+
+            {/* third evolutions */}
+            {evolution.evolves_to.map((lastEvolution: PokeAPI.ChainLink) => (
+              <Text key={lastEvolution.species.name + index.toString()}>
+                {lastEvolution.species.name}
+              </Text>
+            ))}
+          </>
+        ),
+      )}
     </View>
   );
 }
