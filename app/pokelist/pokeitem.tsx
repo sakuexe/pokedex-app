@@ -18,12 +18,12 @@ import { useEffect, useState } from "react";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
-export type PokemonType = {
+export type PokeItemProps = {
   name: string;
   url: string;
 };
 
-export default function PokeItem(pokemon: PokemonType) {
+export default function PokeItem(pokemon: PokeItemProps, index: number) {
   const router = useRouter();
   const { data, isLoading, error } = useFetch<PokeAPI.Pokemon>(
     `${API_URL}/${pokemon.name}`,
@@ -49,7 +49,7 @@ export default function PokeItem(pokemon: PokemonType) {
   };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.listing}>
+    <TouchableOpacity key={index} onPress={handlePress} style={styles.listing}>
       {isLoading ? (
         <>
           <Loading />

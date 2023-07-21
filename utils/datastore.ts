@@ -34,11 +34,11 @@ export async function getData(key: string) {
    */
   try {
     // console.log("all keys: ", await AsyncStorage.getAllKeys());
-    // await AsyncStorage.removeItem("pokemon?limit=24");
+    // await AsyncStorage.removeItem("evolution-chain/3/");
     // console.log(await AsyncStorage.getItem("pokemon?limit=20"));
     const jsonValue = await AsyncStorage.getItem(key);
     console.log("loaded data locally from: ", key);
-    return jsonValue !== null ? JSON.parse(jsonValue) : null;
+    return jsonValue ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.error(e);
     const errorLog = { error: e, key: key, time: new Date() };

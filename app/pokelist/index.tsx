@@ -9,7 +9,7 @@ import { COLORS } from "../../constants";
 import styles from "../../styles/common";
 // custom components
 import PokeItem from "./pokeitem";
-import { PokemonType } from "./pokeitem";
+import { PokeItemProps } from "./pokeitem";
 import ErrorView from "../../components/error";
 import Loading from "../../components/loading";
 // data
@@ -22,7 +22,7 @@ type PokemonList = {
   count: number;
   next: string | null;
   previous: string | null;
-  results: PokemonType[];
+  results: PokeItemProps[];
 };
 
 export default function Pokelist() {
@@ -55,9 +55,7 @@ export default function Pokelist() {
             <ErrorView reload={refetch} />
           ) : (
             data?.results?.map((pokemon: any, index: number) => (
-              <>
-                <PokeItem key={index} name={pokemon.name} url={pokemon.url} />
-              </>
+              <PokeItem key={index} name={pokemon.name} url={pokemon.url} />
             ))
           )}
         </View>
