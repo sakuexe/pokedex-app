@@ -2,8 +2,11 @@ import { Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { ImageResult } from "expo-image-manipulator";
 import { useRouter } from "expo-router";
+// custom components
+import Loading from "../../components/loading";
+import ErrorView from "../../components/error";
 // constants
-import { ICONS, IMAGES } from "../../constants";
+import { COLORS, ICONS, IMAGES } from "../../constants";
 import styles from "../../styles/common";
 // util functions
 import { capitalize } from "../../utils/string";
@@ -49,11 +52,10 @@ export default function PokeItem(pokemon: PokemonType) {
     <TouchableOpacity onPress={handlePress} style={styles.listing}>
       {isLoading ? (
         <>
-          <Image source={IMAGES.loading} style={styles.listingImage} />
-          <Text style={styles.listingText}>Loading...</Text>
+          <Loading />
         </>
       ) : error ? (
-        <Text style={styles.listingText}>Something went wrong...</Text>
+        <ErrorView noButton color={COLORS.white} message="No image found" />
       ) : (
         <>
           <Image
