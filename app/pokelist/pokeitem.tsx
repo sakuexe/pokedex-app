@@ -3,7 +3,7 @@ import { Image } from "expo-image";
 import { ImageResult } from "expo-image-manipulator";
 import { useRouter } from "expo-router";
 // constants
-import { IMAGES } from "../../constants";
+import { ICONS, IMAGES } from "../../constants";
 import styles from "../../styles/common";
 // util functions
 import { capitalize } from "../../utils/string";
@@ -30,10 +30,10 @@ export default function PokeItem(pokemon: PokemonType) {
 
   useEffect(() => {
     // Image.clearDiskCache();
-    if (!data) return;
+    if (!data?.sprites.front_default) return;
     (async () => {
       const resizedImage = await resizeImage(
-        data.sprites.front_default,
+        data?.sprites.front_default,
         { width: 500 },
         0.8,
       );
@@ -56,7 +56,10 @@ export default function PokeItem(pokemon: PokemonType) {
         <Text style={styles.listingText}>Something went wrong...</Text>
       ) : (
         <>
-          <Image source={image} style={styles.listingImage} />
+          <Image
+            source={image || ICONS.loadcircle}
+            style={styles.listingImage}
+          />
           <Text style={styles.listingText}>{capitalize(pokemon.name)}</Text>
         </>
       )}

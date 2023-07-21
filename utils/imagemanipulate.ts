@@ -10,7 +10,7 @@ type ImageSize = {
 };
 
 export async function resizeImage(
-  uri: string,
+  uri: string | undefined,
   size: ImageSize,
   quality: number,
 ): Promise<ImageResult> {

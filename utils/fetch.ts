@@ -24,7 +24,7 @@ async function fetchOnline(url: string, options?: RequestInit) {
   }
   const data = await response.json();
   console.log("fetched data from: ", url);
-  storeData(JSON.stringify(data), getEndpoint(url));
+  storeData(data, getEndpoint(url));
   return data;
 }
 
@@ -37,7 +37,7 @@ export default async function fetchData<Type>(
    * First tries to load data from local storage.
    * If that fails, it fetches data from the API.
    */
-  let fetchedData = await loadLocally(url);
-  if (fetchedData) return fetchedData;
-  return await fetchOnline(url, options);
+  let fetchedData =
+    (await loadLocally(url)) || (await fetchOnline(url, options));
+  return fetchedData;
 }

@@ -37,32 +37,38 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
     fetchEvolutionChain();
   }, []);
 
+  function flattenEvolutionChain(
+    obj: PokeAPI.ChainLink,
+  ): Array<PokeAPI.ChainLink> {
+    // flattens the evolution chain into a single array
+    // so that we can map over it in O(n) time complexity
+    const flattened: Array<PokeAPI.ChainLink> = [];
+    function flatten(obj: PokeAPI.ChainLink): void {
+      flattened.push(obj);
+      if (obj?.evolves_to) {
+        obj?.evolves_to.forEach((evolution) => flatten(evolution));
+      }
+    }
+    flatten(obj);
+    return flattened;
+  }
+
   if (state.error) return <ErrorView reload={() => fetchEvolutionChain()} />;
 
   if (state.loading) return <Loading />;
 
+  const flattenedEvolutionChain = flattenEvolutionChain(
+    state.evolutionChain?.chain.evolves_to[0],
+  );
+
   return (
     <View style={details.container}>
       {/* first evolution */}
-      <Text>{state.evolutionChain?.chain.species.name}</Text>
-
-      {state.evolutionChain?.chain.evolves_to?.map(
-        (evolution: PokeAPI.ChainLink, index: number) => (
-          <>
-            {/* second evolutions */}
-            <Text key={`${state.species.name}-${index}`}>
-              {evolution.species.name}
-            </Text>
-
-            {/* third evolutions */}
-            {evolution.evolves_to.map((lastEvolution: PokeAPI.ChainLink) => (
-              <Text key={lastEvolution.species.name + index.toString()}>
-                {lastEvolution.species.name}
-              </Text>
-            ))}
-          </>
-        ),
-      )}
+      <Text>{state.evolutionChain?.chain?.species.name}</Text>
+      {/* rest of the evolution tree */}
+      {flattenedEvolutionChain.map((evolution, index: number) => (
+        <Text key={index}>{evolution?.species.name}</Text>
+      ))}
     </View>
   );
 }
