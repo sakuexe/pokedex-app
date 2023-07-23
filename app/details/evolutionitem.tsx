@@ -2,7 +2,6 @@ import { Text, View, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 // components
 import Loading from "../../components/loading";
-import Error from "../../components/error";
 // hooks
 import useFetch from "../../hooks/useFetch";
 import { useEffect, useState } from "react";
@@ -43,7 +42,7 @@ export default function EvolutionItem({
       }}
       style={{
         width: "25%",
-        backgroundColor: TYPE_COLORS[pokemonType] || COLORS.black,
+        backgroundColor: TYPE_COLORS[pokemonType] || COLORS.whiteDarker,
         borderRadius: 10,
         padding: 5,
         elevation: 2,

@@ -6,6 +6,7 @@ const COLORS = {
   tertiary: "#0000FF",
   black: "#211e1e",
   white: "#e8d3d5",
+  whiteDarker: "#ccbabb",
 };
 
 const SIZES = {
