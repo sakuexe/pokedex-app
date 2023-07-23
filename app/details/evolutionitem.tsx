@@ -14,10 +14,10 @@ const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
 export default function EvolutionItem({
   name,
-  key,
+  evolutionKey,
 }: {
   name: string;
-  key?: string | number;
+  evolutionKey?: string | number;
 }) {
   const { data: pokemon, isLoading } = useFetch<PokeAPI.Pokemon>(
     `${API_URL}/${name}`,
@@ -36,15 +36,17 @@ export default function EvolutionItem({
 
   return (
     <TouchableOpacity
-      key={key}
+      key={evolutionKey}
       onPress={() => {
         router.push(`/details/${name}`);
       }}
       style={{
         width: "25%",
-        backgroundColor: TYPE_COLORS[pokemonType] || COLORS.whiteDarker,
         borderRadius: 10,
+        position: "relative",
+        overflow: "hidden",
         padding: 5,
+        backgroundColor: COLORS.white,
         elevation: 2,
         shadowColor: COLORS.black,
         shadowOffset: { width: 0, height: 2 },
@@ -52,7 +54,25 @@ export default function EvolutionItem({
         shadowRadius: 2,
       }}
     >
-      <Image source={imageUrl} style={{ width: "100%", aspectRatio: 1 }} />
+      <Image
+        source={imageUrl}
+        style={{ width: "100%", aspectRatio: 1, zIndex: 1 }}
+      />
+      {/* This is added so that the background color will be lighter 
+      without needing to add a lighter version for every color */}
+      <View
+        style={{
+          width: "100%",
+          height: "100%",
+          backgroundColor: TYPE_COLORS[pokemonType] || COLORS.whiteDarker,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          transform: [{ scale: 1.4 }],
+          zIndex: -1,
+          opacity: 0.5,
+        }}
+      />
     </TouchableOpacity>
   );
 }

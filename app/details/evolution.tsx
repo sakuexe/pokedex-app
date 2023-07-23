@@ -5,6 +5,8 @@ import { useEffect, useReducer } from "react";
 import EvolutionItem from "./evolutionitem";
 import Loading from "../../components/loading";
 import ErrorView from "../../components/error";
+// constants
+import { SIZES } from "../../constants";
 // custom hooks
 import fetchData from "../../utils/fetch";
 // types
@@ -66,8 +68,16 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
   );
 
   return (
-    <View style={details.container}>
-      <Text>Evolution</Text>
+    <View style={{ marginHorizontal: SIZES.md }}>
+      <View
+        style={{
+          marginBottom: SIZES.md,
+          alignItems: "center",
+        }}
+      >
+        <Text style={details.h3}>Evolution Chain</Text>
+      </View>
+
       <View
         style={{
           flex: 1,
@@ -79,7 +89,9 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
         {/* first evolution */}
         <EvolutionItem
           name={state.evolutionChain?.chain?.species.name}
-        ></EvolutionItem>
+          evolutionKey="first-evolution"
+          key={state.evolutionChain?.chain?.species.name}
+        />
         {/* rest of the evolution tree */}
         {flattenedEvolutionChain.map((evolution, index: number) => (
           <>
@@ -88,7 +100,11 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
                 →
               </Text>
             )}
-            <EvolutionItem key={index} name={evolution?.species.name} />
+            <EvolutionItem
+              evolutionKey={index}
+              name={evolution?.species.name}
+              key={evolution?.species.name}
+            />
           </>
         ))}
       </View>
