@@ -20,12 +20,9 @@ export default function EvolutionItem({
   name: string;
   key?: string | number;
 }) {
-  const {
-    data: pokemon,
-    isLoading,
-    error,
-    refetch,
-  } = useFetch<PokeAPI.Pokemon>(`${API_URL}/${name}`);
+  const { data: pokemon, isLoading } = useFetch<PokeAPI.Pokemon>(
+    `${API_URL}/${name}`,
+  );
 
   const [imageUrl, setImageUrl] = useState<string>();
   const [pokemonType, setPokemonType] = useState<string>();
@@ -37,7 +34,6 @@ export default function EvolutionItem({
   }, [pokemon]);
 
   if (isLoading) return <Loading />;
-  if (error) return <Text>{error.message}</Text>;
 
   return (
     <TouchableOpacity

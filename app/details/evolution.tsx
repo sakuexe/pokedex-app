@@ -56,13 +56,14 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
 
   if (state.error) return <ErrorView reload={() => fetchEvolutionChain()} />;
 
-  if (state.loading) return <Loading />;
+  // show loading state if evolution chain is not fetched yet
+  // if the fetched data would be empty, fetch function would throw an error
+  // so if there is no evolution chain, we can assume that it is still loading
+  if (state.loading || !state.evolutionChain) return <Loading />;
 
   const flattenedEvolutionChain = flattenEvolutionChain(
     state.evolutionChain?.chain.evolves_to[0],
   );
-
-  console.log(flattenedEvolutionChain);
 
   return (
     <View style={details.container}>
