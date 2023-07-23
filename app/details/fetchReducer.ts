@@ -17,11 +17,11 @@ type fetchAction = {
   evolution?: PokeAPI.EvolutionChain;
 };
 
-export const INITIAL_STATE = {
+export const INITIAL_STATE: evolutionState = {
   loading: false,
   error: false,
   species: null,
-  evolution: null,
+  evolutionChain: null,
 };
 
 export function fetchReducer(

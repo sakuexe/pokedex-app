@@ -17,7 +17,7 @@ type EvolutionChain = PokeAPI.EvolutionChain;
 const SPECIES_URL = "https://pokeapi.co/api/v2/pokemon-species";
 
 export default function Evolution({ pokemonId }: { pokemonId: number }) {
-  const [state, dispatch] = useReducer(fetchReducer, INITIAL_STATE as any);
+  const [state, dispatch] = useReducer(fetchReducer, INITIAL_STATE);
 
   async function fetchEvolutionChain(): Promise<void> {
     dispatch({ type: "FETCH_START" });
@@ -62,15 +62,35 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
     state.evolutionChain?.chain.evolves_to[0],
   );
 
+  console.log(flattenedEvolutionChain);
+
   return (
     <View style={details.container}>
       <Text>Evolution</Text>
-      {/* first evolution */}
-      <Text>{state.evolutionChain?.chain?.species.name}</Text>
-      {/* rest of the evolution tree */}
-      {flattenedEvolutionChain.map((evolution, index: number) => (
-        <EvolutionItem key={index} name={evolution?.species.name} />
-      ))}
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        }}
+      >
+        {/* first evolution */}
+        <EvolutionItem
+          name={state.evolutionChain?.chain?.species.name}
+        ></EvolutionItem>
+        {/* rest of the evolution tree */}
+        {flattenedEvolutionChain.map((evolution, index: number) => (
+          <>
+            {index <= flattenedEvolutionChain.length - 1 && (
+              <Text key={`arrow-${index}`} style={details.h4}>
+                →
+              </Text>
+            )}
+            <EvolutionItem key={index} name={evolution?.species.name} />
+          </>
+        ))}
+      </View>
     </View>
   );
 }
