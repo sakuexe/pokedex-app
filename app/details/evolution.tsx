@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import details from "../../styles/details";
 import { useEffect, useReducer } from "react";
 // components
+import EvolutionItem from "./evolutionitem";
 import Loading from "../../components/loading";
 import ErrorView from "../../components/error";
 // custom hooks
@@ -63,11 +64,12 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
 
   return (
     <View style={details.container}>
+      <Text>Evolution</Text>
       {/* first evolution */}
       <Text>{state.evolutionChain?.chain?.species.name}</Text>
       {/* rest of the evolution tree */}
       {flattenedEvolutionChain.map((evolution, index: number) => (
-        <Text key={index}>{evolution?.species.name}</Text>
+        <EvolutionItem key={index} name={evolution?.species.name} />
       ))}
     </View>
   );
