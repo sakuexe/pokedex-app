@@ -8,7 +8,7 @@ import styles from "../../styles/common";
 
 type FilterProps = {
   currentState: SetStateAction<string | number>;
-  setState: Dispatch<SetStateAction<string | number>>;
+  setState: (value: number) => void;
   selection: any[];
   label?: string;
 };
@@ -25,7 +25,7 @@ export default function PickerFilter(props: FilterProps) {
             fontWeight: "bold",
           }}
           selectedValue={props.currentState}
-          onValueChange={(itemValue, itemIndex) => props.setState(itemValue)}
+          onValueChange={props.setState}
         >
           {props.selection.map((item: any, index: number) => (
             <Picker.Item

@@ -8,54 +8,41 @@ import {
 } from "react-native";
 import { NamedAPIResource, PokemonClient } from "pokenode-ts";
 // react hooks
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 // custom hooks
-import useFetch from "../../hooks/useFetch";
-import fetchData from "../../utils/fetch";
+import { pokeReducer as listReducer, INITIAL_STATE } from "./listReducer";
 import { removeData } from "../../utils/datastore";
 // constants
 import { COLORS, SIZES } from "../../constants";
 import styles from "../../styles/common";
 // custom components
 import PokeItem from "./pokeitem";
-import { PokeItemProps } from "./pokeitem";
 import ErrorView from "../../components/error";
 import Loading from "../../components/loading";
 // data
 import { REGIONS } from "../../assets/json/regions";
 import PickerFilter from "./filter";
-// types
-import { PokeAPI } from "pokeapi-types";
-
-const API_URL = "https://pokeapi.co/api/v2";
-
-type PokemonList = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: PokeItemProps[];
-};
 
 export default function Pokelist() {
-  const [region, setRegion] = useState(0);
-  const [error, setError] = useState<Error>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [pokemonList, setPokemonList] = useState<NamedAPIResource[]>();
+  const [pokeState, dispatch] = useReducer(listReducer, INITIAL_STATE);
 
   useEffect(() => {
     async function fetchData() {
-      setIsLoading(true);
+      dispatch({ type: "FETCHING" });
       const api = new PokemonClient();
       const pokemon = await api.listPokemons(0, 24);
-      setPokemonList(pokemon.results);
-      setIsLoading(false);
+      dispatch({ type: "FETCH_SUCCESS", data: pokemon.results });
     }
     try {
       fetchData();
     } catch (error) {
-      setError(error);
+      dispatch({ type: "FETCH_ERROR", error: error });
     }
   }, []);
+
+  const setRegion = (value: number) => {
+    dispatch({ type: "SET_REGION", region: value });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,12 +55,12 @@ export default function Pokelist() {
           headerTintColor: COLORS.white,
         }}
       />
+
       <FlatList
-        numColumns={3}
         ListHeaderComponent={
           <>
             <PickerFilter
-              currentState={region}
+              currentState={pokeState.region}
               setState={setRegion}
               selection={REGIONS}
             />
@@ -86,6 +73,7 @@ export default function Pokelist() {
             </TouchableOpacity>
           </>
         }
+        numColumns={3}
         style={{
           backgroundColor: COLORS.white,
         }}
@@ -100,16 +88,16 @@ export default function Pokelist() {
           justifyContent: "center",
           gap: SIZES.sm,
         }}
-        data={pokemonList}
+        data={pokeState.pokeList}
         renderItem={({ item }) => {
-          if (error)
+          if (pokeState.error)
             return <ErrorView noButton message="Error fetching Pokemon" />;
-          if (isLoading) return <Loading color={COLORS.primary} />;
+          if (pokeState.loading) return <Loading color={COLORS.primary} />;
           return <PokeItem name={item.name} url={item.url} />;
         }}
-        keyExtractor={(item: PokeItemProps) => item.name}
+        keyExtractor={(item) => item.name}
         onEndReached={async () => {
-          if (isLoading || error) return;
+          if (pokeState.loading || pokeState.error) return;
           // const morePokemon = await fetchData<PokemonList>(data.next);
           // setPokemonList(pokemonList.concat(morePokemon.results));
           console.warn("end reached");
