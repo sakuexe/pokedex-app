@@ -12,13 +12,7 @@ import { COLORS, TYPE_COLORS } from "../../constants";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
 
-export default function EvolutionItem({
-  name,
-  evolutionKey,
-}: {
-  name: string;
-  evolutionKey?: string | number;
-}) {
+export default function EvolutionItem({ name }: { name: string }) {
   const { data: pokemon, isLoading } = useFetch<PokeAPI.Pokemon>(
     `${API_URL}/${name}`,
   );
@@ -36,7 +30,6 @@ export default function EvolutionItem({
 
   return (
     <TouchableOpacity
-      key={evolutionKey}
       onPress={() => {
         router.push(`/details/${name}`);
       }}

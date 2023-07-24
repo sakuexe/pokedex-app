@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import details from "../../styles/details";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, Fragment } from "react";
 // components
 import EvolutionItem from "./evolutionitem";
 import Loading from "../../components/loading";
@@ -94,18 +94,12 @@ export default function Evolution({ pokemonId }: { pokemonId: number }) {
         />
         {/* rest of the evolution tree */}
         {flattenedEvolutionChain.map((evolution, index: number) => (
-          <>
+          <Fragment key={index}>
             {index <= flattenedEvolutionChain.length - 1 && (
-              <Text key={`arrow-${index}`} style={details.h4}>
-                →
-              </Text>
+              <Text style={details.h4}>→</Text>
             )}
-            <EvolutionItem
-              evolutionKey={index}
-              name={evolution?.species.name}
-              key={evolution?.species.name}
-            />
-          </>
+            <EvolutionItem name={evolution?.species.name} />
+          </Fragment>
         ))}
       </View>
     </View>

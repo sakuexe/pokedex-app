@@ -1,11 +1,11 @@
 import { Stack } from "expo-router";
-import { Text, View, SafeAreaView, ScrollView } from "react-native";
+import { Text, View, SafeAreaView, ScrollView, FlatList } from "react-native";
 // react hooks
 import React, { useEffect, useState } from "react";
 // custom hooks
 import useFetch from "../../hooks/useFetch";
 // constants
-import { COLORS } from "../../constants";
+import { COLORS, SIZES } from "../../constants";
 import styles from "../../styles/common";
 // custom components
 import PokeItem from "./pokeitem";
@@ -28,8 +28,15 @@ type PokemonList = {
 export default function Pokelist() {
   const [region, setRegion] = useState(0);
   const { data, isLoading, error, refetch } = useFetch<PokemonList>(
-    `${API_URL}/pokemon?limit=12`,
+    `${API_URL}/pokemon?limit=24`,
   );
+  const pokemonList = Array<PokeItemProps>();
+
+  useEffect(() => {
+    if (data) {
+      pokemonList.push(...data.results);
+    }
+  }, [data]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,24 +49,28 @@ export default function Pokelist() {
           headerTintColor: COLORS.white,
         }}
       />
-      <ScrollView style={{ backgroundColor: COLORS.white }}>
-        <PickerFilter
-          currentState={region}
-          setState={setRegion}
-          selection={REGIONS}
-        />
-        <View style={styles.listContainer}>
-          {isLoading ? (
-            <Loading color={COLORS.primary} />
-          ) : error ? (
-            <ErrorView reload={refetch} />
-          ) : (
-            data?.results?.map((pokemon: any, index: number) => (
-              <PokeItem key={index} name={pokemon.name} url={pokemon.url} />
-            ))
-          )}
-        </View>
-      </ScrollView>
+      <FlatList
+        numColumns={3}
+        keyExtractor={(item) => item.name}
+        ListHeaderComponent={
+          <PickerFilter
+            currentState={region}
+            setState={setRegion}
+            selection={REGIONS}
+          />
+        }
+        style={{ backgroundColor: COLORS.whiteDarker }}
+        contentContainerStyle={{
+          paddingBottom: 50,
+          gap: SIZES.sm,
+        }}
+        columnWrapperStyle={{
+          justifyContent: "center",
+          gap: SIZES.sm,
+        }}
+        data={data?.results}
+        renderItem={({ item }) => <PokeItem name={item.name} url={item.url} />}
+      />
     </SafeAreaView>
   );
 }
