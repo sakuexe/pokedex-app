@@ -1,9 +1,10 @@
 import { Stack } from "expo-router";
-import { Text, View, SafeAreaView, ScrollView, FlatList } from "react-native";
+import { Text, SafeAreaView, FlatList, TouchableOpacity } from "react-native";
 // react hooks
 import React, { useEffect, useState } from "react";
 // custom hooks
 import useFetch from "../../hooks/useFetch";
+import { removeData } from "../../utils/datastore";
 // constants
 import { COLORS, SIZES } from "../../constants";
 import styles from "../../styles/common";
@@ -51,15 +52,23 @@ export default function Pokelist() {
       />
       <FlatList
         numColumns={3}
-        keyExtractor={(item) => item.name}
         ListHeaderComponent={
-          <PickerFilter
-            currentState={region}
-            setState={setRegion}
-            selection={REGIONS}
-          />
+          <>
+            <PickerFilter
+              currentState={region}
+              setState={setRegion}
+              selection={REGIONS}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                removeData(true);
+              }}
+            >
+              <Text>Remove Cache</Text>
+            </TouchableOpacity>
+          </>
         }
-        style={{ backgroundColor: COLORS.whiteDarker }}
+        style={{ backgroundColor: COLORS.white }}
         contentContainerStyle={{
           paddingBottom: 50,
           gap: SIZES.sm,
@@ -68,8 +77,15 @@ export default function Pokelist() {
           justifyContent: "center",
           gap: SIZES.sm,
         }}
-        data={data?.results}
+        data={pokemonList}
         renderItem={({ item }) => <PokeItem name={item.name} url={item.url} />}
+        keyExtractor={(item: PokeItemProps) => item.name}
+        onEndReached={() => {
+          console.log("end reached");
+          // if (data?.next) {
+          //   refetch(data.next);
+          // }
+        }}
       />
     </SafeAreaView>
   );

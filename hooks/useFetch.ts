@@ -6,7 +6,7 @@ export default function useFetch<Type>(url: string, options?: RequestInit) {
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const dataLoading = async () => {
+  const dataLoading = async (url: string) => {
     try {
       const fetchedData = await fetchData<Type>(url, options);
       setData(fetchedData);
@@ -18,13 +18,13 @@ export default function useFetch<Type>(url: string, options?: RequestInit) {
 
   useEffect(() => {
     setIsLoading(true);
-    dataLoading();
+    dataLoading(url);
     setIsLoading(false);
   }, []);
 
-  const refetch = () => {
+  const refetch = (url?: string) => {
     setIsLoading(true);
-    dataLoading();
+    dataLoading(url);
     setIsLoading(false);
   };
 

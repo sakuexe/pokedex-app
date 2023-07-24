@@ -40,9 +40,28 @@ export async function getData(key: string) {
     console.log("loaded data locally from: ", key);
     return jsonValue ? JSON.parse(jsonValue) : null;
   } catch (e) {
-    console.error(e);
-    const errorLog = { error: e, key: key, time: new Date() };
-    await AsyncStorage.setItem(`error-${key}`, JSON.stringify(errorLog));
+    console.error("error loading data locally; ", e);
     return null;
+  }
+}
+
+export async function removeData(
+  removeAll?: boolean,
+  key?: string,
+): Promise<void> {
+  /*
+   * Remove data from device's local storage asynchronously.
+   * Example: removeData('user') => removes { name: 'John' }
+   */
+  try {
+    if (removeAll) {
+      await AsyncStorage.clear();
+      console.log("cleared all local storage");
+    } else {
+      await AsyncStorage.removeItem(key);
+      console.log("removed data locally from: ", key);
+    }
+  } catch (e) {
+    console.error("error removing local data: ", e);
   }
 }
