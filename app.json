@@ -5,6 +5,9 @@
       "bundler": "metro"
     },
     "name": "poke_api",
-    "slug": "poke_api"
+    "slug": "poke_api",
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
