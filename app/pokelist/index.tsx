@@ -1,9 +1,16 @@
 import { Stack } from "expo-router";
-import { Text, SafeAreaView, FlatList, TouchableOpacity } from "react-native";
+import {
+  Text,
+  SafeAreaView,
+  FlatList,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 // react hooks
 import React, { useEffect, useState } from "react";
 // custom hooks
 import useFetch from "../../hooks/useFetch";
+import fetchData from "../../utils/fetch";
 import { removeData } from "../../utils/datastore";
 // constants
 import { COLORS, SIZES } from "../../constants";
@@ -28,14 +35,16 @@ type PokemonList = {
 
 export default function Pokelist() {
   const [region, setRegion] = useState(0);
-  const { data, isLoading, error, refetch } = useFetch<PokemonList>(
+  const { data, isLoading, error } = useFetch<PokemonList>(
     `${API_URL}/pokemon?limit=24`,
   );
-  const pokemonList = Array<PokeItemProps>();
+  const [pokemonList, setPokemonList] = useState<Array<PokeItemProps>>([]);
 
   useEffect(() => {
-    if (data) {
-      pokemonList.push(...data.results);
+    if (data && pokemonList.length <= 0) {
+      // only push data if the list is empty
+      // so in the initial fetch only 24 items are shown
+      setPokemonList(pokemonList.concat(data.results));
     }
   }, [data]);
 
@@ -68,23 +77,33 @@ export default function Pokelist() {
             </TouchableOpacity>
           </>
         }
-        style={{ backgroundColor: COLORS.white }}
+        style={{
+          backgroundColor: COLORS.white,
+        }}
         contentContainerStyle={{
           paddingBottom: 50,
           gap: SIZES.sm,
+          // min height is added to prevent the flatList callback
+          // from being called on the initial render
+          minHeight: Dimensions.get("window").height + 100,
         }}
         columnWrapperStyle={{
           justifyContent: "center",
           gap: SIZES.sm,
         }}
         data={pokemonList}
-        renderItem={({ item }) => <PokeItem name={item.name} url={item.url} />}
+        renderItem={({ item }) => {
+          if (error)
+            return <ErrorView noButton message="Error fetching Pokemon" />;
+          if (isLoading || !data) return <Loading color={COLORS.primary} />;
+          return <PokeItem name={item.name} url={item.url} />;
+        }}
         keyExtractor={(item: PokeItemProps) => item.name}
-        onEndReached={() => {
-          console.log("end reached");
-          // if (data?.next) {
-          //   refetch(data.next);
-          // }
+        onEndReached={async () => {
+          if (!data || isLoading || error) return;
+          const morePokemon = await fetchData<PokemonList>(data.next);
+          setPokemonList(pokemonList.concat(morePokemon.results));
+          console.warn("end reached");
         }}
       />
     </SafeAreaView>
