@@ -2,6 +2,7 @@ import { Text, TouchableOpacity } from "react-native";
 import { Image } from "expo-image";
 import { ImageResult } from "expo-image-manipulator";
 import { useRouter } from "expo-router";
+import { NamedAPIResource, Pokemon, PokemonClient } from "pokenode-ts";
 // custom components
 import Loading from "../../components/loading";
 import ErrorView from "../../components/error";
@@ -25,24 +26,25 @@ export type PokeItemProps = {
 
 export default function PokeItem(pokemon: PokeItemProps, index: number) {
   const router = useRouter();
-  const { data, isLoading, error } = useFetch<PokeAPI.Pokemon>(
-    `${API_URL}/${pokemon.name}`,
-  );
 
-  const [image, setImage] = useState<ImageResult>(null);
+  const [pokemonData, setPokemonData] = useState<Pokemon>();
+  const [error, setError] = useState<Error>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // Image.clearDiskCache();
-    if (!data?.sprites.front_default) return;
-    (async () => {
-      const resizedImage = await resizeImage(
-        data?.sprites.front_default,
-        { width: 500 },
-        0.8,
-      );
-      setImage(resizedImage);
-    })();
-  }, [data]);
+    async function fetchData() {
+      setIsLoading(true);
+      const api = new PokemonClient();
+      const data = await api.getPokemonByName(pokemon.name);
+      setPokemonData(data);
+      setIsLoading(false);
+    }
+    try {
+      fetchData();
+    } catch (error) {
+      setError(error);
+    }
+  }, []);
 
   const handlePress = () => {
     router.push(`/details/${pokemon.name}`);
@@ -59,8 +61,8 @@ export default function PokeItem(pokemon: PokeItemProps, index: number) {
       ) : (
         <>
           <Image
-            source={image || ICONS.loadcircle}
-            style={styles.listingImage}
+            source={pokemonData?.sprites.front_default || ICONS.loadcircle}
+            style={{ width: "100%", height: "100%" }}
           />
           <Text style={styles.listingText}>{capitalize(pokemon.name)}</Text>
         </>

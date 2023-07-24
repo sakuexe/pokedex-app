@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { NamedAPIResource, PokemonClient } from "pokenode-ts";
 // react hooks
 import React, { useEffect, useState } from "react";
 // custom hooks
@@ -23,6 +24,8 @@ import Loading from "../../components/loading";
 // data
 import { REGIONS } from "../../assets/json/regions";
 import PickerFilter from "./filter";
+// types
+import { PokeAPI } from "pokeapi-types";
 
 const API_URL = "https://pokeapi.co/api/v2";
 
@@ -35,18 +38,24 @@ type PokemonList = {
 
 export default function Pokelist() {
   const [region, setRegion] = useState(0);
-  const { data, isLoading, error } = useFetch<PokemonList>(
-    `${API_URL}/pokemon?limit=24`,
-  );
-  const [pokemonList, setPokemonList] = useState<Array<PokeItemProps>>([]);
+  const [error, setError] = useState<Error>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [pokemonList, setPokemonList] = useState<NamedAPIResource[]>();
 
   useEffect(() => {
-    if (data && pokemonList.length <= 0) {
-      // only push data if the list is empty
-      // so in the initial fetch only 24 items are shown
-      setPokemonList(pokemonList.concat(data.results));
+    async function fetchData() {
+      setIsLoading(true);
+      const api = new PokemonClient();
+      const pokemon = await api.listPokemons(0, 24);
+      setPokemonList(pokemon.results);
+      setIsLoading(false);
     }
-  }, [data]);
+    try {
+      fetchData();
+    } catch (error) {
+      setError(error);
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -95,14 +104,14 @@ export default function Pokelist() {
         renderItem={({ item }) => {
           if (error)
             return <ErrorView noButton message="Error fetching Pokemon" />;
-          if (isLoading || !data) return <Loading color={COLORS.primary} />;
+          if (isLoading) return <Loading color={COLORS.primary} />;
           return <PokeItem name={item.name} url={item.url} />;
         }}
         keyExtractor={(item: PokeItemProps) => item.name}
         onEndReached={async () => {
-          if (!data || isLoading || error) return;
-          const morePokemon = await fetchData<PokemonList>(data.next);
-          setPokemonList(pokemonList.concat(morePokemon.results));
+          if (isLoading || error) return;
+          // const morePokemon = await fetchData<PokemonList>(data.next);
+          // setPokemonList(pokemonList.concat(morePokemon.results));
           console.warn("end reached");
         }}
       />

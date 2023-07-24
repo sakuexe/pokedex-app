@@ -65,10 +65,6 @@ const styles = StyleSheet.create({
     marginTop: -14,
     paddingBottom: 20,
   },
-  listingImage: {
-    width: "100%",
-    height: "100%",
-  },
   filterContainer: {
     flex: 1,
     flexDirection: "row",
